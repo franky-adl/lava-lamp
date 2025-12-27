@@ -72,9 +72,8 @@ vec4 lighting(vec3 ro, vec3 r) {
     vec3 ph = normalize(reflect(-lightDir, normal));
     vec3 ph2 = normalize(reflect(-lightDir2, normal));
     float phongValue = pow(max(max(0.0, dot(viewDir, ph)), dot(viewDir, ph2)), 32.0);
-    // float phongShell = pow(max(0.0, dot(viewDir, normalize(reflect(-lightDir2, vNormal)))), 32.0);
     
-    // Handle back-facing surfaces
+    // Handle back-facing surfaces: don't light up anything that is not the balls
     if (dot(viewDir, normal) < 0.0) {
         phongValue = 0.0;
         diffuse = vec3(0.0);
@@ -97,6 +96,8 @@ vec4 lighting(vec3 ro, vec3 r) {
     finalLighting += diffuse * 1.2;
     finalLighting += diffuseShell * 5.5;
     vec3 finalColor = vec3(0.1) * finalLighting;
+
+    // add specular and container fresnel on top of the basic lighting
     finalColor += specular;
     finalColor += lightColor * fresnelShell * 0.5;
     
@@ -104,7 +105,7 @@ vec4 lighting(vec3 ro, vec3 r) {
 }
 
 void main() {
-    // Calculate ray direction from camera through this pixel
+    // Calculate ray direction from camera towards the current pixel
     vec3 rayOrigin = cameraPosition;
     vec3 rayDirection = normalize(vPosition - rayOrigin);
     
