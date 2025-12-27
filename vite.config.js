@@ -6,6 +6,7 @@ import glsl from "vite-plugin-glsl";
 export default {
     root: "src/",
     publicDir: "../public/",
+    base: "/threejs/lava-lamp/",
     plugins: [
         // Restart server on static/public file change
         restart({ restart: ["../public/**"] }),
